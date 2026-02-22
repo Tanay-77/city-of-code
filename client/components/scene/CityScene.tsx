@@ -4,10 +4,12 @@ import { Suspense, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import BuildingsInstanced from './BuildingsInstanced';
 import GroundGrid from './GroundGrid';
+import CityRoads from './CityRoads';
 import DistrictLabels from './DistrictLabels';
 import CameraController from './CameraController';
 import BuildingTooltip from './BuildingTooltip';
 import Lighting from './Lighting';
+import CityProps from './CityProps';
 import { useCityStore } from '../../hooks/useCityStore';
 
 export default function CityScene() {
@@ -31,12 +33,12 @@ export default function CityScene() {
         gl={{
           antialias: true,
           toneMapping: 3, // ACESFilmicToneMapping
-          toneMappingExposure: 1.1,
-          preserveDrawingBuffer: true, // needed for screenshot
+          toneMappingExposure: 1.2,
+          preserveDrawingBuffer: true,
         }}
         onPointerMissed={() => setSelectedBuilding(null)}
       >
-        <color attach="background" args={['#f5f3f0']} />
+        <color attach="background" args={['#d8e4f0']} />
 
         {/* Core scene — never blocked by Suspense */}
         <Lighting />
@@ -48,6 +50,10 @@ export default function CityScene() {
         />
 
         <GroundGrid size={cityLayout.gridSize} />
+
+        <CityRoads roads={cityLayout.roads} />
+
+        <CityProps cityLayout={cityLayout} />
 
         {/* District labels can suspend (drei Text loads font) — isolated Suspense */}
         <Suspense fallback={null}>

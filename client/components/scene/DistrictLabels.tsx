@@ -12,25 +12,16 @@ export default function DistrictLabels({ districts }: DistrictLabelsProps) {
     <group>
       {districts.map((district) => (
         <group key={district.name} position={[district.x, 0.05, district.z]}>
-          {/* District boundary indicator */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-            <planeGeometry args={[district.width - 0.5, district.depth - 0.5]} />
-            <meshStandardMaterial
-              color="#4a5568"
-              transparent
-              opacity={0.2}
-              roughness={1}
-            />
-          </mesh>
-
           {/* District label */}
           <Text
             position={[0, 0.15, -district.depth / 2 + 0.5]}
-            fontSize={0.5}
-            color="#a0b0c0"
+            fontSize={0.55}
+            color="#e0e8f0"
             anchorX="center"
             anchorY="bottom"
             maxWidth={district.width}
+            outlineWidth={0.02}
+            outlineColor="#2a2a2a"
           >
             {district.name === '/' ? 'root' : district.name}
           </Text>

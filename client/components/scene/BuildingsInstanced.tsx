@@ -17,37 +17,41 @@ const DIM_COLOR = new THREE.Color('#2a2a2a');
 const ACTIVITY_HIGH = new THREE.Color('#ff4444');
 const ACTIVITY_LOW = new THREE.Color('#334455');
 
-// Per-building-type palettes — bright enough for white-theme, used as texture tint
+// Per-building-type palettes — warm concrete/steel/glass tones for golden-hour
 const TYPE_PALETTES: Record<BuildingType, THREE.Color[]> = {
   skyscraper: [
-    new THREE.Color('#dce4ea'),
-    new THREE.Color('#c8d4dc'),
-    new THREE.Color('#d4dce4'),
-    new THREE.Color('#e0e8ee'),
+    new THREE.Color('#c8d0d8'),
+    new THREE.Color('#b8c4d0'),
+    new THREE.Color('#c0ccd8'),
+    new THREE.Color('#d0d8e0'),
+    new THREE.Color('#b0bcc8'),
   ],
   tower: [
-    new THREE.Color('#c0d0dc'),
-    new THREE.Color('#b4c4d0'),
-    new THREE.Color('#acc0d0'),
-    new THREE.Color('#c8d8e4'),
+    new THREE.Color('#8ca0b8'),
+    new THREE.Color('#98aec4'),
+    new THREE.Color('#7c94ac'),
+    new THREE.Color('#a4b8cc'),
+    new THREE.Color('#90a8c0'),
   ],
   office: [
-    new THREE.Color('#e8e0d8'),
-    new THREE.Color('#ddd4cc'),
-    new THREE.Color('#e4dcd4'),
-    new THREE.Color('#d8d0c8'),
+    new THREE.Color('#d8ccc0'),
+    new THREE.Color('#ccbeb0'),
+    new THREE.Color('#d0c4b4'),
+    new THREE.Color('#c4b8a8'),
+    new THREE.Color('#e0d4c8'),
   ],
   'low-rise': [
-    new THREE.Color('#f0ece8'),
-    new THREE.Color('#eae4de'),
-    new THREE.Color('#ece8e2'),
-    new THREE.Color('#e6e0da'),
+    new THREE.Color('#dcd4c8'),
+    new THREE.Color('#d0c8bc'),
+    new THREE.Color('#e4dcd0'),
+    new THREE.Color('#c8c0b4'),
+    new THREE.Color('#d8d0c4'),
   ],
   shed: [
-    new THREE.Color('#e4e0dc'),
-    new THREE.Color('#dcd8d2'),
-    new THREE.Color('#e0dcd8'),
-    new THREE.Color('#d8d4d0'),
+    new THREE.Color('#c0b8ac'),
+    new THREE.Color('#b8b0a4'),
+    new THREE.Color('#ccc4b8'),
+    new THREE.Color('#b4aca0'),
   ],
 };
 

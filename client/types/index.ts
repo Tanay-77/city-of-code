@@ -57,9 +57,17 @@ export interface BuildingData extends RepoFile {
   wallTint: number;       // subtle per-building color variation (0-1)
 }
 
+export interface RoadSegment {
+  x: number;
+  z: number;
+  width: number;
+  depth: number;
+}
+
 export interface CityLayout {
   buildings: BuildingData[];
   districts: District[];
+  roads: RoadSegment[];
   gridSize: number;
 }
 
