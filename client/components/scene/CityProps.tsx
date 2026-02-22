@@ -21,7 +21,7 @@ export default function CityProps({ cityLayout }: CityPropsProps) {
   const lampBulbRef = useRef<THREE.InstancedMesh>(null);
 
   const { trees, lamps } = useMemo(() => {
-    const { buildings, districts } = cityLayout;
+    const { buildings, districts, roads } = cityLayout;
     const treePositions: { x: number; z: number; scale: number }[] = [];
     const lampPositions: { x: number; z: number; rotY: number }[] = [];
 
@@ -38,6 +38,14 @@ export default function CityProps({ cityLayout }: CityPropsProps) {
     const isFree = (x: number, z: number) =>
       !occupied.has(`${Math.round(x * 2)},${Math.round(z * 2)}`);
 
+    // Road overlap check — only filter items on the asphalt itself
+    const isOnRoad = (x: number, z: number) =>
+      roads.some((r) => {
+        const hw = r.width / 2;
+        const hd = r.depth / 2;
+        return x >= r.x - hw && x <= r.x + hw && z >= r.z - hd && z <= r.z + hd;
+      });
+
     // Compute city bounds — only place trees within this area
     let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
     districts.forEach((d) => {
@@ -50,8 +58,9 @@ export default function CityProps({ cityLayout }: CityPropsProps) {
     const isInCity = (x: number, z: number) =>
       x >= minX && x <= maxX && z >= minZ && z <= maxZ;
 
-    // Place trees along district edges (on sidewalk strips)
+    // Place trees along district edges (outside the road zone)
     const TREE_SPACING = 3;
+    const TREE_OFFSET = 1.8; // push trees to far sidewalk edge, away from asphalt
     districts.forEach((d) => {
       const hw = d.width / 2;
       const hd = d.depth / 2;
@@ -59,32 +68,33 @@ export default function CityProps({ cityLayout }: CityPropsProps) {
       // Trees along each edge of each district
       for (let t = -hw + 1; t < hw; t += TREE_SPACING + Math.random() * 1.5) {
         const px = d.x + t;
-        const topZ = d.z - hd - 0.6;
-        const botZ = d.z + hd + 0.6;
-        if (isFree(px, topZ) && isInCity(px, topZ))
+        const topZ = d.z - hd - TREE_OFFSET;
+        const botZ = d.z + hd + TREE_OFFSET;
+        if (isFree(px, topZ) && isInCity(px, topZ) && !isOnRoad(px, topZ))
           treePositions.push({ x: px, z: topZ, scale: 0.4 + Math.random() * 0.5 });
-        if (isFree(px, botZ) && isInCity(px, botZ))
+        if (isFree(px, botZ) && isInCity(px, botZ) && !isOnRoad(px, botZ))
           treePositions.push({ x: px, z: botZ, scale: 0.4 + Math.random() * 0.5 });
       }
       for (let t = -hd + 1; t < hd; t += TREE_SPACING + Math.random() * 1.5) {
         const pz = d.z + t;
-        const leftX = d.x - hw - 0.6;
-        const rightX = d.x + hw + 0.6;
-        if (isFree(leftX, pz) && isInCity(leftX, pz))
+        const leftX = d.x - hw - TREE_OFFSET;
+        const rightX = d.x + hw + TREE_OFFSET;
+        if (isFree(leftX, pz) && isInCity(leftX, pz) && !isOnRoad(leftX, pz))
           treePositions.push({ x: leftX, z: pz, scale: 0.4 + Math.random() * 0.5 });
-        if (isFree(rightX, pz) && isInCity(rightX, pz))
+        if (isFree(rightX, pz) && isInCity(rightX, pz) && !isOnRoad(rightX, pz))
           treePositions.push({ x: rightX, z: pz, scale: 0.4 + Math.random() * 0.5 });
       }
 
-      // Lamps at district corners
+      // Lamps at district corners (pushed outside road zone)
+      const LAMP_OFFSET = 1.8;
       const corners = [
-        { x: d.x - hw - 0.4, z: d.z - hd - 0.4 },
-        { x: d.x + hw + 0.4, z: d.z - hd - 0.4 },
-        { x: d.x + hw + 0.4, z: d.z + hd + 0.4 },
-        { x: d.x - hw - 0.4, z: d.z + hd + 0.4 },
+        { x: d.x - hw - LAMP_OFFSET, z: d.z - hd - LAMP_OFFSET },
+        { x: d.x + hw + LAMP_OFFSET, z: d.z - hd - LAMP_OFFSET },
+        { x: d.x + hw + LAMP_OFFSET, z: d.z + hd + LAMP_OFFSET },
+        { x: d.x - hw - LAMP_OFFSET, z: d.z + hd + LAMP_OFFSET },
       ];
       corners.forEach((c) => {
-        if (isFree(c.x, c.z))
+        if (isFree(c.x, c.z) && !isOnRoad(c.x, c.z))
           lampPositions.push({ ...c, rotY: Math.random() * Math.PI * 2 });
       });
     });
