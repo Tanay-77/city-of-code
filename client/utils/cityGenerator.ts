@@ -50,10 +50,32 @@ export function generateCityLayout(data: RepoData): CityLayout {
 
   const roads = computeRoads(districts, gridSize);
 
-  console.log('[CityGen] districts:', districts.length, 'buildings:', buildings.length, 'roads:', roads.length, 'gridSize:', gridSize);
+  // Remove buildings that overlap with any road segment
+  const ROAD_PAD = 0.15; // small padding so buildings don't sit right at road edge
+  const filteredBuildings = buildings.filter((b) => {
+    const bLeft   = b.x - b.width / 2;
+    const bRight  = b.x + b.width / 2;
+    const bTop    = b.z - b.depth / 2;
+    const bBottom = b.z + b.depth / 2;
+
+    for (const r of roads) {
+      const rLeft   = r.x - r.width / 2 - ROAD_PAD;
+      const rRight  = r.x + r.width / 2 + ROAD_PAD;
+      const rTop    = r.z - r.depth / 2 - ROAD_PAD;
+      const rBottom = r.z + r.depth / 2 + ROAD_PAD;
+
+      // AABB overlap test
+      if (bRight > rLeft && bLeft < rRight && bBottom > rTop && bTop < rBottom) {
+        return false; // building overlaps a road — remove it
+      }
+    }
+    return true;
+  });
+
+  console.log('[CityGen] districts:', districts.length, 'buildings:', filteredBuildings.length, '(removed', buildings.length - filteredBuildings.length, 'on roads)', 'roads:', roads.length, 'gridSize:', gridSize);
   if (roads.length > 0) console.log('[CityGen] sample road:', roads[0]);
 
-  return { buildings, districts, roads, gridSize };
+  return { buildings: filteredBuildings, districts, roads, gridSize };
 }
 
 /* ------------------------------------------------------------------ */

@@ -17,8 +17,8 @@ function createGroundTexture(): THREE.CanvasTexture {
   canvas.height = res;
   const ctx = canvas.getContext('2d')!;
 
-  // Light warm concrete
-  ctx.fillStyle = '#9e9890';
+  // Earthy ground with green tint
+  ctx.fillStyle = '#7a8a6e';
   ctx.fillRect(0, 0, res, res);
 
   // Fine grain noise
@@ -52,15 +52,15 @@ export default function GroundGrid({ size }: GroundGridProps) {
           map={groundTex}
           roughness={0.9}
           metalness={0}
-          color="#bab4aa"
+          color="#8a9a78"
         />
       </mesh>
 
-      {/* Outer terrain — green */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]}>
+      {/* Outer terrain — lush forest floor */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.15, 0]}>
         <planeGeometry args={[gridSize * 3, gridSize * 3]} />
         <meshStandardMaterial
-          color="#8ca880"
+          color="#4a6b3a"
           roughness={1}
           metalness={0}
         />

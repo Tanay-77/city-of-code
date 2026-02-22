@@ -10,6 +10,7 @@ import CameraController from './CameraController';
 import BuildingTooltip from './BuildingTooltip';
 import Lighting from './Lighting';
 import CityProps from './CityProps';
+import CityGrass from './CityGrass';
 import { useCityStore } from '../../hooks/useCityStore';
 
 export default function CityScene() {
@@ -54,6 +55,8 @@ export default function CityScene() {
         <CityRoads roads={cityLayout.roads} />
 
         <CityProps cityLayout={cityLayout} />
+
+        <CityGrass cityLayout={cityLayout} />
 
         {/* District labels can suspend (drei Text loads font) — isolated Suspense */}
         <Suspense fallback={null}>
