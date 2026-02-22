@@ -36,7 +36,7 @@ export default function CityScene() {
         }}
         onPointerMissed={() => setSelectedBuilding(null)}
       >
-        <color attach="background" args={['#f0eeec']} />
+        <color attach="background" args={['#f5f3f0']} />
 
         {/* Core scene — never blocked by Suspense */}
         <Lighting />

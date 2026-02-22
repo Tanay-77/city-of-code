@@ -37,6 +37,8 @@ export interface ApiResponse<T> {
 
 export type VisualizationMode = 'structure' | 'activity' | 'language';
 
+export type BuildingType = 'skyscraper' | 'tower' | 'office' | 'low-rise' | 'shed';
+
 export interface BuildingData extends RepoFile {
   // Computed visualization properties
   height: number;
@@ -46,6 +48,13 @@ export interface BuildingData extends RepoFile {
   y: number;
   z: number;
   emissiveIntensity: number;
+  buildingType: BuildingType;
+  // Architectural details
+  hasSetback: boolean;    // tall buildings get a narrower top section
+  setbackRatio: number;   // how much narrower the top is (0.5-0.8)
+  setbackHeight: number;  // where the setback starts (fraction of total height)
+  roofType: 'flat' | 'antenna' | 'helipad' | 'mechanical';
+  wallTint: number;       // subtle per-building color variation (0-1)
 }
 
 export interface CityLayout {
