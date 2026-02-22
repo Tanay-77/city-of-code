@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo, useCallback } from 'react';
+import { useRef, useMemo, useCallback, useEffect } from 'react';
 import { useFrame, ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useCityStore } from '../../hooks/useCityStore';
@@ -37,12 +37,17 @@ function getBuildingColor(
         ? ACTIVITY_HIGH_COLOR.clone().lerp(new THREE.Color('#ff8800'), building.emissiveIntensity)
         : ACTIVITY_LOW_COLOR;
     case 'structure':
-    default:
+    default: {
       // White / off-white architectural model style
-      const brightness = 0.85 + (building.height / 25) * 0.15;
-      return new THREE.Color(brightness, brightness, brightness * 0.98);
+      const brightness = 0.82 + (building.height / 25) * 0.18;
+      return new THREE.Color(brightness, brightness, brightness * 0.97);
+    }
   }
 }
+
+// Reusable temp objects (allocated once outside component)
+const _obj = new THREE.Object3D();
+const _color = new THREE.Color();
 
 export default function BuildingsInstanced({ buildings, mode }: BuildingsInstancedProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -55,34 +60,40 @@ export default function BuildingsInstanced({ buildings, mode }: BuildingsInstanc
   const hasSearch = searchQuery.trim().length > 0;
   const count = buildings.length;
 
-  // Pre-allocate objects
-  const tempObject = useMemo(() => new THREE.Object3D(), []);
-  const tempColor = useMemo(() => new THREE.Color(), []);
-
-  // Set transforms once (positions don't change after generation)
-  const transforms = useMemo(() => {
-    const matrix = new THREE.Matrix4();
-    const matrices: THREE.Matrix4[] = [];
-    buildings.forEach((b) => {
-      matrix.identity();
-      matrix.makeScale(b.width, b.height, b.depth);
-      matrix.setPosition(b.x, b.height / 2, b.z);
-      matrices.push(matrix.clone());
-    });
-    return matrices;
-  }, [buildings]);
-
-  // Update instance matrices and colors each frame  
-  useFrame(({ clock }) => {
-    if (!meshRef.current) return;
+  // Set initial transforms and colors when buildings data changes
+  useEffect(() => {
     const mesh = meshRef.current;
+    if (!mesh || count === 0) return;
+
+    for (let i = 0; i < count; i++) {
+      const b = buildings[i];
+
+      // Use Object3D to properly compose the matrix
+      _obj.position.set(b.x, b.height / 2, b.z);
+      _obj.scale.set(b.width, b.height, b.depth);
+      _obj.rotation.set(0, 0, 0);
+      _obj.updateMatrix();
+
+      mesh.setMatrixAt(i, _obj.matrix);
+
+      // Set initial color
+      const color = getBuildingColor(b, mode, false, false, false);
+      mesh.setColorAt(i, color);
+    }
+
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    mesh.computeBoundingSphere();
+  }, [buildings, count, mode]);
+
+  // Update colors each frame for hover/search/pulse effects
+  useFrame(({ clock }) => {
+    const mesh = meshRef.current;
+    if (!mesh || count === 0) return;
     const time = clock.getElapsedTime();
 
     for (let i = 0; i < count; i++) {
       const building = buildings[i];
-
-      // Set transform
-      mesh.setMatrixAt(i, transforms[i]);
 
       // Calculate color
       const isHovered = hoveredBuilding?.path === building.path;
@@ -92,14 +103,13 @@ export default function BuildingsInstanced({ buildings, mode }: BuildingsInstanc
       // Add subtle emissive pulsing for frequently updated files
       if (building.isFrequentlyUpdated && mode !== 'structure') {
         const pulse = Math.sin(time * 2 + i * 0.5) * 0.15 + 0.85;
-        tempColor.set(color).multiplyScalar(pulse);
-        mesh.setColorAt(i, tempColor);
+        _color.copy(color).multiplyScalar(pulse);
+        mesh.setColorAt(i, _color);
       } else {
         mesh.setColorAt(i, color);
       }
     }
 
-    mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   });
 
@@ -130,6 +140,8 @@ export default function BuildingsInstanced({ buildings, mode }: BuildingsInstanc
     [buildings, setSelectedBuilding],
   );
 
+  if (count === 0) return null;
+
   return (
     <instancedMesh
       ref={meshRef}
@@ -142,9 +154,8 @@ export default function BuildingsInstanced({ buildings, mode }: BuildingsInstanc
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial
         vertexColors
-        roughness={0.3}
-        metalness={0.1}
-        envMapIntensity={0.5}
+        roughness={0.35}
+        metalness={0.05}
       />
     </instancedMesh>
   );

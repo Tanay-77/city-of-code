@@ -2,8 +2,6 @@
 
 import { Suspense, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Preload } from '@react-three/drei';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import BuildingsInstanced from './BuildingsInstanced';
 import GroundGrid from './GroundGrid';
 import DistrictLabels from './DistrictLabels';
@@ -17,21 +15,10 @@ export default function CityScene() {
   const visualizationMode = useCityStore((s) => s.visualizationMode);
   const setSelectedBuilding = useCityStore((s) => s.setSelectedBuilding);
 
-  const handleCanvasClick = useCallback(
-    (e: React.MouseEvent) => {
-      // If clicking on canvas background (not a building), deselect
-      if ((e.target as HTMLElement).tagName === 'CANVAS') {
-        // The building click handler will stopPropagation,
-        // so this only fires for background clicks
-      }
-    },
-    [],
-  );
-
   if (!cityLayout) return null;
 
   return (
-    <div className="city-canvas-container" onClick={handleCanvasClick}>
+    <div className="city-canvas-container">
       <Canvas
         camera={{
           position: [40, 30, 40],
@@ -40,42 +27,34 @@ export default function CityScene() {
           far: 500,
         }}
         shadows
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{
           antialias: true,
           toneMapping: 3, // ACESFilmicToneMapping
           toneMappingExposure: 1.1,
+          preserveDrawingBuffer: true, // needed for screenshot
         }}
         onPointerMissed={() => setSelectedBuilding(null)}
       >
         <color attach="background" args={['#f0eeec']} />
 
+        {/* Core scene — never blocked by Suspense */}
+        <Lighting />
+        <CameraController />
+
+        <BuildingsInstanced
+          buildings={cityLayout.buildings}
+          mode={visualizationMode}
+        />
+
+        <GroundGrid size={cityLayout.gridSize} />
+
+        {/* District labels can suspend (drei Text loads font) — isolated Suspense */}
         <Suspense fallback={null}>
-          <Lighting />
-          <CameraController />
-
-          <BuildingsInstanced
-            buildings={cityLayout.buildings}
-            mode={visualizationMode}
-          />
-
-          <GroundGrid size={cityLayout.gridSize} />
           <DistrictLabels districts={cityLayout.districts} />
-          <BuildingTooltip />
-
-          {/* Post-processing */}
-          <EffectComposer multisampling={4}>
-            <Bloom
-              luminanceThreshold={0.9}
-              luminanceSmoothing={0.5}
-              intensity={0.15}
-              mipmapBlur
-            />
-            <Vignette eskil={false} offset={0.1} darkness={0.3} />
-          </EffectComposer>
-
-          <Preload all />
         </Suspense>
+
+        <BuildingTooltip />
       </Canvas>
     </div>
   );

@@ -30,7 +30,6 @@ export default function DistrictLabels({ districts }: DistrictLabelsProps) {
             color="#999999"
             anchorX="center"
             anchorY="bottom"
-            font="/fonts/inter-medium.woff"
             maxWidth={district.width}
           >
             {district.name === '/' ? 'root' : district.name}

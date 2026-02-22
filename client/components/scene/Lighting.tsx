@@ -1,20 +1,20 @@
 'use client';
 
-import { Environment, ContactShadows } from '@react-three/drei';
+import { ContactShadows } from '@react-three/drei';
 
 export default function Lighting() {
   return (
     <>
       {/* Soft ambient base */}
-      <ambientLight intensity={0.6} color="#f5f0eb" />
+      <ambientLight intensity={0.8} color="#f5f0eb" />
 
-      {/* Main directional light — soft shadow */}
+      {/* Key light — main directional */}
       <directionalLight
         position={[30, 50, 30]}
-        intensity={1.0}
+        intensity={1.2}
         color="#ffffff"
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-60}
         shadow-camera-right={60}
         shadow-camera-top={60}
@@ -27,32 +27,32 @@ export default function Lighting() {
       {/* Fill light from opposite side */}
       <directionalLight
         position={[-20, 30, -20]}
-        intensity={0.3}
+        intensity={0.4}
         color="#e8e4f0"
       />
 
       {/* Rim light for depth */}
       <directionalLight
         position={[0, 20, -40]}
-        intensity={0.2}
+        intensity={0.3}
         color="#d0d8e8"
       />
+
+      {/* Hemisphere light for natural ground-sky bounce */}
+      <hemisphereLight args={['#f0f0ff', '#d0c8b8', 0.4]} />
 
       {/* Contact shadows for grounding */}
       <ContactShadows
         position={[0, -0.04, 0]}
-        opacity={0.35}
+        opacity={0.3}
         scale={120}
-        blur={2}
+        blur={2.5}
         far={50}
         color="#b0b0b0"
       />
 
-      {/* HDR environment for reflections */}
-      <Environment preset="city" background={false} environmentIntensity={0.3} />
-
       {/* Subtle fog for depth */}
-      <fog attach="fog" args={['#f0eeec', 60, 180]} />
+      <fog attach="fog" args={['#f0eeec', 80, 250]} />
     </>
   );
 }

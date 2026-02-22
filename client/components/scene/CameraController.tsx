@@ -1,14 +1,13 @@
 'use client';
 
-import { useRef, useEffect, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { useRef, useEffect } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCityStore } from '../../hooks/useCityStore';
 
 export default function CameraController() {
-  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const controlsRef = useRef<any>(null);
   const cameraTarget = useCityStore((s) => s.cameraTarget);
   const currentTarget = useRef(new THREE.Vector3(0, 2, 0));
   const targetPosition = useRef(new THREE.Vector3(0, 2, 0));
