@@ -11,6 +11,7 @@ import BuildingTooltip from './BuildingTooltip';
 import Lighting from './Lighting';
 import CityProps from './CityProps';
 import CityGrass from './CityGrass';
+import CityTraffic from './CityTraffic';
 import { useCityStore } from '../../hooks/useCityStore';
 
 export default function CityScene() {
@@ -57,6 +58,8 @@ export default function CityScene() {
         <CityProps cityLayout={cityLayout} />
 
         <CityGrass cityLayout={cityLayout} />
+
+        <CityTraffic cityLayout={cityLayout} />
 
         {/* District labels can suspend (drei Text loads font) — isolated Suspense */}
         <Suspense fallback={null}>
