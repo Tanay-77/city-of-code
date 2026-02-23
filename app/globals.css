@@ -798,29 +798,450 @@ html, body {
 }
 
 /* ================================
-   RESPONSIVE
+   SIDEBAR MOBILE TOGGLE
    ================================ */
 
-@media (max-width: 768px) {
+.sidebar-toggle-btn {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-medium);
+  z-index: 25;
+  transition: all 0.2s;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #fff;
+  color: var(--text-primary);
+}
+
+/* Sidebar overlay backdrop for mobile */
+.sidebar-overlay {
+  display: none;
+}
+
+/* ================================
+   RESPONSIVE — Tablet (≤1024px)
+   ================================ */
+
+@media (max-width: 1024px) {
   .landing-headline {
-    font-size: 28px;
+    font-size: 36px;
+  }
+
+  .landing-subtitle {
+    font-size: 15px;
   }
 
   .sidebar {
-    width: 200px;
-    font-size: 12px;
+    width: 240px;
   }
 
   .controls-bar {
+    max-width: calc(100vw - 280px);
+  }
+}
+
+/* ================================
+   RESPONSIVE — Small Tablet / Large Phone (≤768px)
+   ================================ */
+
+@media (max-width: 768px) {
+  /* Landing Page */
+  .landing-content {
+    gap: 20px;
+    padding: 32px 20px;
+    max-width: 100%;
+  }
+
+  .landing-headline {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+  }
+
+  .landing-headline br {
+    display: none;
+  }
+
+  .landing-subtitle {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .landing-subtitle br {
+    display: none;
+  }
+
+  .landing-form {
+    max-width: 100%;
+  }
+
+  .url-input {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .generate-btn {
+    height: 44px;
+    padding: 0 24px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .landing-examples {
+    gap: 6px;
+  }
+
+  .example-btn {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .brand-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .brand-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Loading Screen */
+  .loading-city {
+    height: 80px;
+    gap: 3px;
+  }
+
+  .loading-block {
+    width: 8px;
+  }
+
+  .loading-title {
+    font-size: 18px;
+  }
+
+  .loading-bar-container {
+    width: 220px;
+  }
+
+  /* Controls Bar */
+  .controls-bar {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    transform: none;
+    max-width: none;
     flex-wrap: wrap;
-    max-width: calc(100vw - 32px);
+    gap: 6px;
+    padding: 6px;
   }
 
   .search-input {
-    width: 140px;
+    width: 120px;
+  }
+
+  .search-input:focus {
+    width: 160px;
   }
 
   .mode-label {
     display: none;
+  }
+
+  .mode-btn {
+    padding: 0 8px;
+    height: 30px;
+  }
+
+  .action-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Sidebar — slide-over panel */
+  .sidebar-toggle-btn {
+    display: flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    border-right: none;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 40;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar-overlay.sidebar-overlay-visible {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Back button */
+  .back-btn {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  /* Error states */
+  .global-error-banner {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    font-size: 13px;
+  }
+
+  .error-toast {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    font-size: 12px;
+  }
+
+  /* Building tooltip */
+  .building-tooltip {
+    min-width: 160px;
+    padding: 10px 12px;
+  }
+}
+
+/* ================================
+   RESPONSIVE — Phone (≤480px)
+   ================================ */
+
+@media (max-width: 480px) {
+  /* Landing Page */
+  .landing-content {
+    gap: 16px;
+    padding: 24px 16px;
+  }
+
+  .landing-headline {
+    font-size: 24px;
+  }
+
+  .landing-subtitle {
+    font-size: 13px;
+  }
+
+  .url-input {
+    height: 44px;
+    font-size: 13px;
+    padding: 0 12px 0 40px;
+  }
+
+  .input-icon {
+    left: 12px;
+  }
+
+  .generate-btn {
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .landing-examples {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .landing-footer {
+    font-size: 11px;
+    bottom: 12px;
+    text-align: center;
+    padding: 0 16px;
+  }
+
+  /* Loading Screen */
+  .loading-screen {
+    gap: 28px;
+    padding: 0 16px;
+  }
+
+  .loading-city {
+    height: 60px;
+    gap: 2px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .loading-block {
+    width: 6px;
+  }
+
+  .loading-title {
+    font-size: 16px;
+  }
+
+  .loading-stage {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .loading-bar-container {
+    width: 180px;
+  }
+
+  /* Controls — compact row */
+  .controls-bar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .search-input {
+    width: 100px;
+    height: 28px;
+    font-size: 12px;
+    padding: 0 24px;
+  }
+
+  .search-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .search-input:focus {
+    width: 130px;
+  }
+
+  .mode-btn {
+    padding: 0 6px;
+    height: 28px;
+  }
+
+  .mode-icon {
+    font-size: 12px;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .control-group + .control-group {
+    padding-left: 4px;
+  }
+
+  /* Sidebar — full width on small phones */
+  .sidebar {
+    width: 100%;
+  }
+
+  .sidebar-section {
+    padding: 12px;
+  }
+
+  .sidebar-title {
+    font-size: 13px;
+  }
+
+  /* Back button */
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .back-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Error states */
+  .global-error-banner {
+    top: 12px;
+    left: 8px;
+    right: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .error-toast {
+    bottom: 12px;
+    left: 8px;
+    right: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}
+
+/* ================================
+   RESPONSIVE — Very small Phone (≤360px)
+   ================================ */
+
+@media (max-width: 360px) {
+  .landing-headline {
+    font-size: 20px;
+  }
+
+  .landing-subtitle {
+    font-size: 12px;
+  }
+
+  .brand-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .brand-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .controls-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .search-group {
+    order: -1;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .search-input:focus {
+    width: 100%;
   }
 }

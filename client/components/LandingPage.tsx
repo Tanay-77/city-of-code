@@ -46,7 +46,7 @@ export default function LandingPage({ onGenerate }: LandingPageProps) {
               <rect x="22" y="18" width="8" height="18" rx="1" fill="#ccc" opacity="0.6" />
             </svg>
           </div>
-          <span className="brand-label">CODEBASE CITY</span>
+          <span className="brand-label">CITY OF CODE</span>
         </div>
 
         {/* Headline */}

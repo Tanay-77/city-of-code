@@ -15,6 +15,13 @@ export const metadata: Metadata = {
   keywords: ["github", "visualization", "3d", "codebase", "three.js", "city"],
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

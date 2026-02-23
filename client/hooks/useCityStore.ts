@@ -20,6 +20,9 @@ interface CityStore {
   // Camera
   cameraTarget: [number, number, number] | null;
 
+  // UI state
+  sidebarOpen: boolean;
+
   // Actions
   setRepoData: (data: RepoData) => void;
   setLoading: (loading: boolean) => void;
@@ -30,6 +33,8 @@ interface CityStore {
   setSearchQuery: (query: string) => void;
   setVisualizationMode: (mode: VisualizationMode) => void;
   setCameraTarget: (target: [number, number, number] | null) => void;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
   resetCamera: () => void;
   reset: () => void;
 }
@@ -47,6 +52,7 @@ export const useCityStore = create<CityStore>((set, get) => ({
   highlightedBuildings: new Set(),
   visualizationMode: 'structure',
   cameraTarget: null,
+  sidebarOpen: false,
 
   // Actions
   setRepoData: (data: RepoData) => {
@@ -108,6 +114,9 @@ export const useCityStore = create<CityStore>((set, get) => ({
 
   setCameraTarget: (target: [number, number, number] | null) => set({ cameraTarget: target }),
 
+  setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+
   resetCamera: () => set({ cameraTarget: null, selectedBuilding: null }),
 
   reset: () =>
@@ -123,5 +132,6 @@ export const useCityStore = create<CityStore>((set, get) => ({
       highlightedBuildings: new Set(),
       visualizationMode: 'structure',
       cameraTarget: null,
+      sidebarOpen: false,
     }),
 }));

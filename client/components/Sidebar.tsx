@@ -5,11 +5,12 @@ import { useCityStore } from '../hooks/useCityStore';
 export default function Sidebar() {
   const repoData = useCityStore((s) => s.repoData);
   const selectedBuilding = useCityStore((s) => s.selectedBuilding);
+  const sidebarOpen = useCityStore((s) => s.sidebarOpen);
 
   if (!repoData) return null;
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-section">
         <h2 className="sidebar-title">
           {repoData.owner}/{repoData.repo}
