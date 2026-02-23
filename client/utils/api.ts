@@ -1,4 +1,8 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// In production, requests go to the deployed backend on Render.
+// In local dev, requests go directly to localhost:3001.
+const API_BASE = process.env.NODE_ENV === 'production'
+  ? (process.env.NEXT_PUBLIC_API_URL || 'https://city-of-code.onrender.com')
+  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
 
 export async function fetchRepoData(url: string) {
   const encoded = encodeURIComponent(url);
