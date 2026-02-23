@@ -93,7 +93,7 @@ export default function LandingPage({ onGenerate }: LandingPageProps) {
         <div className="landing-examples">
           <span className="examples-label">Try:</span>
           {[
-            'https://github.com/facebook/react',
+            'https://github.com/openclaw/openclaw',
             'https://github.com/vercel/next.js',
             'https://github.com/denoland/deno',
           ].map((repo) => (
