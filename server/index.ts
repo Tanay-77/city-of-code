@@ -8,11 +8,11 @@ import { globalRateLimiter } from './middleware/rateLimiter';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  origin: (process.env.CLIENT_ORIGIN || 'http://localhost:3000').split(','),
   methods: ['GET'],
   credentials: true,
 }));
