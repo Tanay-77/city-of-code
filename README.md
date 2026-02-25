@@ -6,46 +6,6 @@ Every file becomes a building. Every folder becomes a district. Your codebase be
 
 ---
 
-## Architecture
-
-```
-/client                     Frontend (Next.js + Three.js)
-  /components
-    /scene                  3D scene components
-      BuildingsInstanced.tsx   Instanced mesh renderer (1000+ buildings)
-      CityScene.tsx            Main canvas + post-processing
-      CameraController.tsx     Smooth orbit + focus transitions
-      BuildingTooltip.tsx      3D HTML tooltip overlay
-      DistrictLabels.tsx       Folder district labels
-      GroundGrid.tsx           Ground plane + grid
-      Lighting.tsx             HDR environment + shadows
-    Controls.tsx             Search, mode toggle, actions
-    LandingPage.tsx          URL input + hero
-    LoadingAnimation.tsx     Procedural city generation animation
-    Sidebar.tsx              Stats + language breakdown
-    VisualizationView.tsx    Full visualization layout
-  /hooks
-    useCityStore.ts          Zustand global state
-  /types
-    index.ts                 Shared TypeScript interfaces
-  /utils
-    api.ts                   Backend API client
-    cityGenerator.ts         Repo data → 3D city layout algorithm
-
-/server                     Backend (Express)
-  index.ts                  Express app entry
-  /routes
-    repo.ts                 GET /api/repo?url=
-  /services
-    github.ts               GitHub API client + data processing
-    cache.ts                In-memory cache (Redis-ready Map)
-    languageMap.ts           Extension → language + color mapping
-    validator.ts             URL validation + sanitization
-  /middleware
-    errorHandler.ts          Structured error responses
-    rateLimiter.ts           Rate limiting
-```
-
 ## Tech Stack
 
 | Layer     | Technology |
@@ -59,32 +19,6 @@ Every file becomes a building. Every folder becomes a district. Your codebase be
 | API       | GitHub REST API v3 |
 | Cache     | In-memory Map (15-min TTL) |
 
-## Setup
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-
-### Install & Run
-
-```bash
-# 1. Install dependencies
-npm install
-
-# 2. Copy environment config
-cp .env.example .env
-
-# 3. (Optional) Add your GitHub token to .env for higher rate limits
-#    Create one at https://github.com/settings/tokens — no scopes needed
-
-# 4. Start both frontend and backend
-npm run dev
-```
-
-- **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:3001
-- **Health check**: http://localhost:3001/health
-
 ## Visualization Mapping
 
 | Repository Concept | 3D Representation |
@@ -97,12 +31,6 @@ npm run dev
 | Frequently updated file | Pulsing emissive glow |
 | Large file | Skyscraper |
 | Rarely updated file | Dim appearance |
-
-## Visualization Modes
-
-- **Structure** — Clean architectural white model (Apple keynote aesthetic)
-- **Activity** — Warm/cool colors showing commit frequency
-- **Language** — Each language gets its own color
 
 ## Performance Strategy
 
