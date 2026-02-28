@@ -111,6 +111,11 @@ export default function LandingPage({ onGenerate }: LandingPageProps) {
         </div>
       </div>
 
+      {/* City illustration */}
+      <div className="landing-city-image">
+        <img src="/landii.png" alt="City illustration" />
+      </div>
+
       {/* Footer */}
       <div className="landing-footer">
         <span>Built with Next.js, Three.js &amp; GitHub API</span>
